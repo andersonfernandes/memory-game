@@ -1,7 +1,5 @@
 package com.snatik.matches.fragments;
 
-import java.util.Locale;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
@@ -16,8 +14,11 @@ import com.snatik.matches.R;
 import com.snatik.matches.common.Memory;
 import com.snatik.matches.common.Shared;
 import com.snatik.matches.events.ui.ThemeSelectedEvent;
-import com.snatik.matches.themes.Theme;
-import com.snatik.matches.themes.Themes;
+import com.snatik.matches.themes.AnimalsThemePrototype;
+import com.snatik.matches.themes.MonstersThemePrototype;
+import com.snatik.matches.themes.ThemePrototype;
+
+import java.util.Locale;
 
 public class ThemeSelectFragment extends Fragment {
 
@@ -27,9 +28,9 @@ public class ThemeSelectFragment extends Fragment {
 		View animals = view.findViewById(R.id.theme_animals_container);
 		View monsters = view.findViewById(R.id.theme_monsters_container);
 
-		final Theme themeAnimals = Themes.createAnimalsTheme();
+		final ThemePrototype themeAnimals = new AnimalsThemePrototype().clone();
 		setStars((ImageView) animals.findViewById(R.id.theme_animals), themeAnimals, "animals");
-		final Theme themeMonsters = Themes.createMosterTheme();
+		final ThemePrototype themeMonsters = new MonstersThemePrototype().clone();
 		setStars((ImageView) monsters.findViewById(R.id.theme_monsters), themeMonsters, "monsters");
 
 		animals.setOnClickListener(new View.OnClickListener() {
@@ -66,10 +67,10 @@ public class ThemeSelectFragment extends Fragment {
 		animatorSet.start();
 	}
 
-	private void setStars(ImageView imageView, Theme theme, String type) {
+	private void setStars(ImageView imageView, ThemePrototype theme, String type) {
 		int sum = 0;
 		for (int difficulty = 1; difficulty <= 6; difficulty++) {
-			sum += Memory.getHighStars(theme.id, difficulty);
+			sum += Memory.getHighStars(theme.getId(), difficulty);
 		}
 		int num = sum / 6;
 		if (num != 0) {

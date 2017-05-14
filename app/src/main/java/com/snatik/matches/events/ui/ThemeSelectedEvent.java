@@ -2,14 +2,14 @@ package com.snatik.matches.events.ui;
 
 import com.snatik.matches.events.AbstractEvent;
 import com.snatik.matches.events.EventObserver;
-import com.snatik.matches.themes.Theme;
+import com.snatik.matches.themes.ThemePrototype;
 
 public class ThemeSelectedEvent extends AbstractEvent {
 
 	public static final String TYPE = ThemeSelectedEvent.class.getName();
-	public final Theme theme;
+	public final ThemePrototype theme;
 
-	public ThemeSelectedEvent(Theme theme) {
+	public ThemeSelectedEvent(ThemePrototype theme) {
 		this.theme = theme;
 	}
 

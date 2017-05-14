@@ -1,6 +1,6 @@
 package com.snatik.matches.model;
 
-import com.snatik.matches.themes.Theme;
+import com.snatik.matches.themes.ThemePrototype;
 
 /**
  * This is instance of active playing game
@@ -22,7 +22,7 @@ public class Game {
 	/**
 	 * The selected theme
 	 */
-	public Theme theme;
+	public ThemePrototype theme;
 
 	public GameState gameState;
 

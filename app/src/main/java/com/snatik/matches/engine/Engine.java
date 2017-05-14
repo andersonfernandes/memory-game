@@ -1,10 +1,5 @@
 package com.snatik.matches.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -33,11 +28,15 @@ import com.snatik.matches.model.BoardArrangment;
 import com.snatik.matches.model.BoardConfiguration;
 import com.snatik.matches.model.Game;
 import com.snatik.matches.model.GameState;
-import com.snatik.matches.themes.Theme;
-import com.snatik.matches.themes.Themes;
+import com.snatik.matches.themes.ThemePrototype;
 import com.snatik.matches.ui.PopupManager;
 import com.snatik.matches.utils.Clock;
 import com.snatik.matches.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class Engine extends EventObserverAdapter {
 
@@ -46,7 +45,7 @@ public class Engine extends EventObserverAdapter {
 	private int mFlippedId = -1;
 	private int mToFlip = -1;
 	private ScreenController mScreenController;
-	private Theme mSelectedTheme;
+	private ThemePrototype mSelectedTheme;
 	private ImageView mBackgroundImage;
 	private Handler mHandler;
 
@@ -142,7 +141,7 @@ public class Engine extends EventObserverAdapter {
 			@Override
 			protected TransitionDrawable doInBackground(Void... params) {
 				Bitmap bitmap = Utils.scaleDown(R.drawable.background, Utils.screenWidth(), Utils.screenHeight());
-				Bitmap backgroundImage = Themes.getBackgroundImage(mSelectedTheme);
+				Bitmap backgroundImage = mSelectedTheme.getBackgroundImage();
 				backgroundImage = Utils.crop(backgroundImage, Utils.screenHeight(), Utils.screenWidth());
 				Drawable backgrounds[] = new Drawable[2];
 				backgrounds[0] = new BitmapDrawable(Shared.context.getResources(), bitmap);
@@ -191,7 +190,7 @@ public class Engine extends EventObserverAdapter {
 		Collections.shuffle(ids);
 
 		// place the board
-		List<String> tileImageUrls = mPlayingGame.theme.tileImageUrls;
+		List<String> tileImageUrls = mPlayingGame.theme.getTileImageUrls();
 		Collections.shuffle(tileImageUrls);
 		boardArrangment.pairs = new HashMap<Integer, Integer>();
 		boardArrangment.tileUrls = new HashMap<Integer, String>();
@@ -255,10 +254,10 @@ public class Engine extends EventObserverAdapter {
 					}
 
 					// calc score
-					gameState.achievedScore = mPlayingGame.boardConfiguration.difficulty * gameState.remainedSeconds * mPlayingGame.theme.id;
+					gameState.achievedScore = mPlayingGame.boardConfiguration.difficulty * gameState.remainedSeconds * mPlayingGame.theme.getId();
 
 					// save to memory
-					Memory.save(mPlayingGame.theme.id, mPlayingGame.boardConfiguration.difficulty, gameState.achievedStars);
+					Memory.save(mPlayingGame.theme.getId(), mPlayingGame.boardConfiguration.difficulty, gameState.achievedStars);
 
 					Shared.eventBus.notify(new GameWonEvent(gameState), 1200);
 				}
@@ -276,7 +275,7 @@ public class Engine extends EventObserverAdapter {
 		return mPlayingGame;
 	}
 
-	public Theme getSelectedTheme() {
+	public ThemePrototype getSelectedTheme() {
 		return mSelectedTheme;
 	}
 

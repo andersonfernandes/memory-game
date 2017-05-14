@@ -1,12 +1,12 @@
 package com.snatik.matches.model;
 
-import java.util.Map;
-
 import android.graphics.Bitmap;
 
 import com.snatik.matches.common.Shared;
-import com.snatik.matches.themes.Themes;
+import com.snatik.matches.themes.ThemePrototype;
 import com.snatik.matches.utils.Utils;
+
+import java.util.Map;
 
 /**
  * Before game starts, engine build new board
@@ -29,8 +29,8 @@ public class BoardArrangment {
 	 */
 	public Bitmap getTileBitmap(int id, int size) {
 		String string = tileUrls.get(id);
-		if (string.contains(Themes.URI_DRAWABLE)) {
-			String drawableResourceName = string.substring(Themes.URI_DRAWABLE.length());
+		if (string.contains(ThemePrototype.URI_DRAWABLE)) {
+			String drawableResourceName = string.substring(ThemePrototype.URI_DRAWABLE.length());
 			int drawableResourceId = Shared.context.getResources().getIdentifier(drawableResourceName, "drawable", Shared.context.getPackageName());
 			Bitmap bitmap = Utils.scaleDown(drawableResourceId, size, size);
 			return Utils.crop(bitmap, size, size);
