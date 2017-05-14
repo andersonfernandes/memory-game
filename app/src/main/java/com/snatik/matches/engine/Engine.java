@@ -1,10 +1,5 @@
 package com.snatik.matches.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,7 +12,6 @@ import com.snatik.matches.R;
 import com.snatik.matches.common.Memory;
 import com.snatik.matches.common.Music;
 import com.snatik.matches.common.Shared;
-import com.snatik.matches.engine.ScreenController.Screen;
 import com.snatik.matches.events.EventObserverAdapter;
 import com.snatik.matches.events.engine.FlipDownCardsEvent;
 import com.snatik.matches.events.engine.GameWonEvent;
@@ -38,6 +32,11 @@ import com.snatik.matches.themes.Themes;
 import com.snatik.matches.ui.PopupManager;
 import com.snatik.matches.utils.Clock;
 import com.snatik.matches.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class Engine extends EventObserverAdapter {
 
@@ -114,7 +113,7 @@ public class Engine extends EventObserverAdapter {
 
 	@Override
 	public void onEvent(StartEvent event) {
-		mScreenController.openScreen(Screen.THEME_SELECT);
+		mScreenController.openScreen(ScreenState.THEME_SELECT);
 	}
 
 	@Override
@@ -130,13 +129,13 @@ public class Engine extends EventObserverAdapter {
 	@Override
 	public void onEvent(BackGameEvent event) {
 		PopupManager.closePopup();
-		mScreenController.openScreen(Screen.DIFFICULTY);
+		mScreenController.openScreen(ScreenState.DIFFICULTY);
 	}
 
 	@Override
 	public void onEvent(ThemeSelectedEvent event) {
 		mSelectedTheme = event.theme;
-		mScreenController.openScreen(Screen.DIFFICULTY);
+		mScreenController.openScreen(ScreenState.DIFFICULTY);
 		AsyncTask<Void, Void, TransitionDrawable> task = new AsyncTask<Void, Void, TransitionDrawable>() {
 
 			@Override
@@ -173,7 +172,7 @@ public class Engine extends EventObserverAdapter {
 		arrangeBoard();
 
 		// start the screen
-		mScreenController.openScreen(Screen.GAME);
+		mScreenController.openScreen(ScreenState.GAME);
 	}
 
 	private void arrangeBoard() {

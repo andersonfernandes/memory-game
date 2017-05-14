@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.snatik.matches.common.Shared;
 import com.snatik.matches.engine.Engine;
 import com.snatik.matches.engine.ScreenController;
-import com.snatik.matches.engine.ScreenController.Screen;
+import com.snatik.matches.engine.ScreenState;
 import com.snatik.matches.events.EventBus;
 import com.snatik.matches.events.ui.BackGameEvent;
 import com.snatik.matches.ui.PopupManager;
@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity {
 		setBackgroundImage();
 
 		// set menu
-		ScreenController.getInstance().openScreen(Screen.MENU);
+		ScreenController.getInstance().openScreen(ScreenState.MENU);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
 	public void onBackPressed() {
 		if (PopupManager.isShown()) {
 			PopupManager.closePopup();
-			if (ScreenController.getLastScreen() == Screen.GAME) {
+			if (ScreenController.getLastScreen() == ScreenState.GAME) {
 				Shared.eventBus.notify(new BackGameEvent());
 			}
 		} else if (ScreenController.getInstance().onBack()) {

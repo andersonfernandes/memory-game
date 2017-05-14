@@ -18,7 +18,7 @@ import com.snatik.matches.fragments.ThemeSelectFragment;
 public class ScreenController {
 
 	private static ScreenController mInstance = null;
-	private static List<Screen> openedScreens = new ArrayList<Screen>();
+	private static List<ScreenState> openedScreens = new ArrayList<>();
 	private FragmentManager mFragmentManager;
 
 	private ScreenController() {
@@ -31,27 +31,37 @@ public class ScreenController {
 		return mInstance;
 	}
 
-	public static enum Screen {
-		MENU,
-		GAME,
-		DIFFICULTY,
-		THEME_SELECT
-	}
+//	public enum Screen {
+//		MENU(new MenuState()),
+//		GAME(new GameState()),
+//		DIFFICULTY(new DifficultyState()),
+//		THEME_SELECT(new ThemeSelectState());
+//
+//		private final FragmentState state;
+//
+//		Screen(FragmentState state) {
+//			this.state= state;
+//		}
+//
+//		public FragmentState getState() {
+//			return this.state;
+//		}
+//	}
 	
-	public static Screen getLastScreen() {
+	public static ScreenState getLastScreen() {
 		return openedScreens.get(openedScreens.size() - 1);
 	}
 
-	public void openScreen(Screen screen) {
+	public void openScreen(ScreenState screen) {
 		mFragmentManager = Shared.activity.getSupportFragmentManager();
 		
-		if (screen == Screen.GAME && openedScreens.get(openedScreens.size() - 1) == Screen.GAME) {
+		if (screen == ScreenState.GAME && openedScreens.get(openedScreens.size() - 1) == ScreenState.GAME) {
 			openedScreens.remove(openedScreens.size() - 1);
-		} else if (screen == Screen.DIFFICULTY && openedScreens.get(openedScreens.size() - 1) == Screen.GAME) {
+		} else if (screen == ScreenState.DIFFICULTY && openedScreens.get(openedScreens.size() - 1) == ScreenState.GAME) {
 			openedScreens.remove(openedScreens.size() - 1);
 			openedScreens.remove(openedScreens.size() - 1);
 		}
-		Fragment fragment = getFragment(screen);
+		Fragment fragment = screen.getState().createFragment();
 		FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 		fragmentTransaction.replace(R.id.fragment_container, fragment);
 		fragmentTransaction.commit();
@@ -60,16 +70,16 @@ public class ScreenController {
 
 	public boolean onBack() {
 		if (openedScreens.size() > 0) {
-			Screen screenToRemove = openedScreens.get(openedScreens.size() - 1);
+			ScreenState screenToRemove = openedScreens.get(openedScreens.size() - 1);
 			openedScreens.remove(openedScreens.size() - 1);
 			if (openedScreens.size() == 0) {
 				return true;
 			}
-			Screen screen = openedScreens.get(openedScreens.size() - 1);
+			ScreenState screen = openedScreens.get(openedScreens.size() - 1);
 			openedScreens.remove(openedScreens.size() - 1);
 			openScreen(screen);
-			if ((screen == Screen.THEME_SELECT || screen == Screen.MENU) && 
-					(screenToRemove == Screen.DIFFICULTY || screenToRemove == Screen.GAME)) {
+			if ((screen == ScreenState.THEME_SELECT || screen == ScreenState.MENU) &&
+					(screenToRemove == ScreenState.DIFFICULTY || screenToRemove == ScreenState.GAME)) {
 				Shared.eventBus.notify(new ResetBackgroundEvent());
 			}
 			return false;
@@ -77,19 +87,4 @@ public class ScreenController {
 		return true;
 	}
 
-	private Fragment getFragment(Screen screen) {
-		switch (screen) {
-		case MENU:
-			return new MenuFragment();
-		case DIFFICULTY:
-			return new DifficultySelectFragment();
-		case GAME:
-			return new GameFragment();
-		case THEME_SELECT:
-			return new ThemeSelectFragment();
-		default:
-			break;
-		}
-		return null;
-	}
 }
